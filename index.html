@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RokLearn - Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>RokLearn</h1>
+                <p>Interactive Learning Platform</p>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#write" class="nav-link auth-required" style="display: none;">Create Post</a>
+                <div class="auth-section">
+                    <button id="loginBtn" class="auth-btn login-btn">Login</button>
+                    <button id="registerBtn" class="auth-btn register-btn">Register</button>
+                    <div id="userMenu" class="user-menu" style="display: none;">
+                        <span id="userName" class="user-name"></span>
+                        <button id="logoutBtn" class="auth-btn logout-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <h2>Welcome to RokLearn</h2>
+                <p>An interactive learning platform where knowledge meets community. Share, learn, and grow together.</p>
+            </div>
+            
+            <div class="blog-posts" id="blogPosts">
+                <!-- Posts will be loaded dynamically from database -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="about-content">
+                <h2>About RokLearn</h2>
+                <p>RokLearn is an interactive learning platform that brings together educators, students, and knowledge enthusiasts. Our mission is to create a collaborative environment where learning is engaging, multimedia-rich, and accessible to everyone.</p>
+                
+                <h3>Platform Features</h3>
+                <ul>
+                    <li><strong>Multimedia Content:</strong> Share posts with text, images, audio, and video content</li>
+                    <li><strong>Interactive Community:</strong> Like, comment, and engage with educational content</li>
+                    <li><strong>Secure Authentication:</strong> Protected posting with user accounts</li>
+                    <li><strong>Rich Media Support:</strong> Upload and embed various media types for enhanced learning</li>
+                </ul>
+
+                <h3>Join the Learning Community</h3>
+                <p>Whether you're an educator sharing knowledge, a student exploring new topics, or a lifelong learner, RokLearn provides the tools and community to enhance your educational journey.</p>
+            </div>
+        </section>
+
+        <!-- Write Post Section -->
+        <section id="write" class="section">
+            <div class="write-post">
+                <h2>Create a New Post</h2>
+                <form id="postForm" class="post-form">
+                    <div class="form-group">
+                        <label for="postTitle">Title *</label>
+                        <input type="text" id="postTitle" name="title" required placeholder="Enter your post title...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postDescription">Description *</label>
+                        <textarea id="postDescription" name="description" required placeholder="Write your post description..." rows="8"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="postTags">Tags (comma-separated)</label>
+                        <input type="text" id="postTags" name="tags" placeholder="Education, Technology, Science...">
+                    </div>
+                    
+                    <div class="media-uploads">
+                        <h3>Media Attachments</h3>
+                        
+                        <div class="form-group">
+                            <label for="postImage">Image</label>
+                            <input type="file" id="postImage" name="image" accept="image/*">
+                            <div id="imagePreview" class="media-preview"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="postAudio">Audio</label>
+                            <input type="file" id="postAudio" name="audio" accept="audio/*">
+                            <div id="audioPreview" class="media-preview"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="postVideo">Video</label>
+                            <input type="file" id="postVideo" name="video" accept="video/*">
+                            <div id="videoPreview" class="media-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">Publish Post</button>
+                        <button type="button" class="preview-btn" onclick="previewPost()">Preview</button>
+                        <button type="reset" class="reset-btn">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for full post view -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <div id="authContent">
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <h2>Login to RokLearn</h2>
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="auth-submit-btn">Login</button>
+                    </form>
+                    <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegisterForm()">Register here</a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form" style="display: none;">
+                    <h2>Join RokLearn</h2>
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="registerName">Full Name</label>
+                            <input type="text" id="registerName" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required placeholder="Create a password">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" required placeholder="Confirm your password">
+                        </div>
+                        <button type="submit" class="auth-submit-btn">Register</button>
+                    </form>
+                    <p class="auth-switch">Already have an account? <a href="#" onclick="showLoginForm()">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 RokLearn. Interactive Learning Platform for Everyone.</p>
+    </footer>
+
+    <script src="database.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
