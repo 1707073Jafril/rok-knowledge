@@ -6,7 +6,8 @@
 - User registration and login
 - Secure password hashing
 - Session management
-- Only authenticated users can create posts
+- **Anyone can view all posts**
+- **Only authenticated users can create posts**
 
 ### ✅ **Multimedia Posts**
 - **Title** and **Description** (required fields)
@@ -21,10 +22,12 @@
 - Real-time interaction updates
 
 ### ✅ **SQLite Database**
-- Local SQLite database using sql.js
-- Fallback to localStorage if SQLite fails
+- Local SQLite database saved as `db.sqlite`
+- Uses sql.js for browser compatibility
+- Export/Import database functionality
 - Tables: users, posts, comments, likes
 - Proper relationships and constraints
+- Auto-backup to localStorage
 
 ## 📁 Files Structure
 

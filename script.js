@@ -212,7 +212,8 @@ class RokLearnManager {
                 blogPostsContainer.innerHTML = `
                     <div style="text-align: center; padding: 3rem; color: #718096;">
                         <h3>No posts yet</h3>
-                        <p>Start sharing knowledge on RokLearn!</p>
+                        <p>${authManager.isLoggedIn() ? 'Start sharing knowledge on RokLearn!' : 'Login to create the first post on RokLearn!'}</p>
+                        ${!authManager.isLoggedIn() ? '<button onclick="authManager.showLoginModal()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer;">Login to Post</button>' : ''}
                     </div>
                 `;
                 return;

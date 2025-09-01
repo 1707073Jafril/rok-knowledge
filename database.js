@@ -15,14 +15,28 @@ class DatabaseManager {
             
             const SQL = await sqlPromise;
             
-            // Try to load existing database from localStorage
+            // Try to load existing database from localStorage first (for browser compatibility)
             const savedDb = localStorage.getItem('roklearn_database');
             if (savedDb) {
                 const uint8Array = new Uint8Array(JSON.parse(savedDb));
                 this.db = new SQL.Database(uint8Array);
+                console.log('Loaded database from localStorage');
             } else {
-                this.db = new SQL.Database();
-                this.createTables();
+                // Try to load from file if available
+                try {
+                    const response = await fetch('./db.sqlite');
+                    if (response.ok) {
+                        const arrayBuffer = await response.arrayBuffer();
+                        this.db = new SQL.Database(new Uint8Array(arrayBuffer));
+                        console.log('Loaded existing db.sqlite file');
+                    } else {
+                        throw new Error('Database file not found');
+                    }
+                } catch (error) {
+                    console.log('Creating new database');
+                    this.db = new SQL.Database();
+                    this.createTables();
+                }
             }
             
             this.isInitialized = true;
@@ -119,8 +133,12 @@ class DatabaseManager {
         if (this.db) {
             try {
                 const data = this.db.export();
+                
+                // Save to localStorage (primary storage for browser)
                 const buffer = Array.from(data);
                 localStorage.setItem('roklearn_database', JSON.stringify(buffer));
+                
+                console.log('Database saved to localStorage');
             } catch (error) {
                 console.error('Failed to save database:', error);
             }
